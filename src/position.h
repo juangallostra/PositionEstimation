@@ -13,8 +13,9 @@ class PositionEstimator {
         void angularCompensation(float[2] flow, float[3] gyro, float height);
 
     public:
+
         PositionEstimator(float KOpticalFlow);
-        
+
         void estimate();
 
 } // class PositionEstimator
