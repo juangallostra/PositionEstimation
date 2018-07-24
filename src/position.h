@@ -10,12 +10,17 @@ class PositionEstimator {
         // Estimator parameters
         float KOpticalFlow;
 
-        void angularCompensation(float[2] flow, float[3] gyro, float height);
+        float lastUpdateTime;
+
+        void angularCompensation(float velocity[2], float flow[2], float gyro[3],
+                                 float height, float currentTime);
 
     public:
 
         PositionEstimator(float KOpticalFlow);
 
+        void begin();
+
         void estimate();
 
-} // class PositionEstimator
+}; // class PositionEstimator
