@@ -11,7 +11,7 @@ PositionEstimator position = PositionEstimator(1.0f);
 
 void setup(void)
 {
-    position.begin();
+    position.reset();
 }
 
 void loop(void)
