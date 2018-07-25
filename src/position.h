@@ -4,12 +4,14 @@
 
 # pragma once
 
+# include <stdint.h>
+
 class PositionEstimator {
 
     private:
         // Estimator parameters
         float KOpticalFlow;
-        float lastUpdateTime;
+        uint32_t lastUpdateTime;
 
         // Estimated values
         float xVel;
@@ -18,7 +20,7 @@ class PositionEstimator {
         float yPos;
 
         void angularCompensation(float flow[2], float gyro[3],
-                                 float height, float currentTime);
+                                 float height, uint32_t currentTime);
 
     public:
 

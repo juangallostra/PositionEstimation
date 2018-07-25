@@ -12,7 +12,7 @@ PositionEstimator::PositionEstimator(float KOpticalFlow)
 }
 
 void PositionEstimator::angularCompensation(float flow[2], float gyro[3],
-                                            float height, float currentTime)
+                                            float height, uint32_t currentTime)
 {
     float K = KOpticalFlow * height;
     float deltaT = (currentTime - lastUpdateTime) / 1000000.0f;
@@ -22,6 +22,7 @@ void PositionEstimator::angularCompensation(float flow[2], float gyro[3],
 
 void PositionEstimator::reset()
 {
+    // reset time
     lastUpdateTime = micros();
     // reset estimated velocity
     xVel = 0;
