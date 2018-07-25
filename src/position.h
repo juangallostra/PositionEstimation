@@ -9,18 +9,27 @@ class PositionEstimator {
     private:
         // Estimator parameters
         float KOpticalFlow;
-
         float lastUpdateTime;
 
-        void angularCompensation(float velocity[2], float flow[2], float gyro[3],
+        // Estimated values
+        float xVel;
+        float yVel;
+        float xPos;
+        float yPos;
+
+        void angularCompensation(float flow[2], float gyro[3],
                                  float height, float currentTime);
 
     public:
 
         PositionEstimator(float KOpticalFlow);
 
-        void begin();
+        void reset();
 
         void estimate();
+
+        void getEstimatedVelocity(float velocity[2]);
+
+        void getEstimatedPosition(float position[2]);
 
 }; // class PositionEstimator
