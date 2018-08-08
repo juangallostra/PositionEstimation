@@ -89,20 +89,20 @@ void KalmanFilter::updateErrorCovariance(float covariance[3][3], float errorCova
     copyMatrix3x3(covariance, tmp2);
 }
 
-float KalmanFilter::estimate(float velocityEstimate[3], float gyro[3], float accel[3], float flow[2], float deltat)
+float KalmanFilter::estimate(float velocityEstimate[3], float gyro[3], float accel[3], float VelFromFlow[2], float deltat)
 {
     float predictedState[3];
     float updatedState[3];
     float errorCovariance[3][3];
     float updatedErrorCovariance[3][3];
     float gain[3][3];
-
+    float measurement[3] = {VelFromFlow[0], VelFromFlow[1], 0};
     scaleVector(accel, 9.81, accel); // Scale accel readings since they are measured in gs
     // perform estimation
     predictState(predictedState, gyro, deltat);
     predictErrorCovariance(errorCovariance, gyro, deltat);
     updateGain(gain, errorCovariance);
-    updateState(updatedState, predictedState, gain, accel);
+    updateState(updatedState, predictedState, gain, measurement);
     updateErrorCovariance(updatedErrorCovariance, errorCovariance, gain);
     // Store required values for next iteration
     copyVector(currentState, updatedState);

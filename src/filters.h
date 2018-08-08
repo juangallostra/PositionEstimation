@@ -32,6 +32,6 @@ class KalmanFilter {
 
     KalmanFilter(float R[3][3], float Q[3][3]);
 
-    float estimate(float velocityEstimate[3], float gyro[3], float accel[3], float flow[2], float deltat);
+    float estimate(float velocityEstimate[3], float gyro[3], float accel[3], float VelFromFlow[2], float deltat);
 
 }; // Class KalmanFilter
