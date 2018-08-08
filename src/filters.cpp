@@ -7,9 +7,10 @@
 
 #include "filters.h"
 
-KalmanFilter::KalmanFilter()
+KalmanFilter::KalmanFilter(float R[3][3], float Q[3][3])
 {
-
+  copyMatrix3x3(this->R, R);
+  copyMatrix3x3(this->Q, Q);
 }
 
 void KalmanFilter::predictState(float predictedState[3], float gyro[3], float deltat)
@@ -22,14 +23,11 @@ void KalmanFilter::predictState(float predictedState[3], float gyro[3], float de
     // Predict state
     scaleAndAccumulateMatrix3x3(identity, -deltat, skewFromGyro);
     matrixDotVector3x3(predictedState, identity, currentState);
-    // TODO: is this normalization required?
-    normalizeVector(predictedState);
 }
 
 void KalmanFilter::predictErrorCovariance(float covariance[3][3], float gyro[3], float deltat)
 {
     // required matrices
-    float Q[3][3];
     float identity[3][3];
     identityMatrix3x3(identity);
     float skewFromGyro[3][3];
@@ -38,8 +36,6 @@ void KalmanFilter::predictErrorCovariance(float covariance[3][3], float gyro[3],
     float tmpTransposed[3][3];
     float tmp2[3][3];
     // predict error covariance
-    // TODO: which is our Q for this case? Assume Gaussian white noise?
-    getPredictionCovariance(Q, currentState, deltat);
     scaleAndAccumulateMatrix3x3(identity, -deltat, skewFromGyro);
     copyMatrix3x3(tmp, identity);
     transposeMatrix3x3(tmpTransposed, tmp);
@@ -51,7 +47,6 @@ void KalmanFilter::predictErrorCovariance(float covariance[3][3], float gyro[3],
 void KalmanFilter::updateGain(float gain[3][3], float errorCovariance[3][3])
 {
     // required matrices
-    float R[3][3];
     float HTransposed[3][3];
     transposeMatrix3x3(HTransposed, H);
     float tmp[3][3];
@@ -59,8 +54,6 @@ void KalmanFilter::updateGain(float gain[3][3], float errorCovariance[3][3])
     float tmp2Inverse[3][3];
     // update kalman gain
     // P.dot(H.T).dot(inv(H.dot(P).dot(H.T) + R))
-    // TODO: Which is our R in this case? Assume Gaussian white noise?
-    getMeasurementCovariance(R);
     matrixProduct3x3(tmp, errorCovariance, HTransposed);
     matrixProduct3x3(tmp2, H, tmp);
     scaleAndAccumulateMatrix3x3(tmp2, 1.0, R);
@@ -68,7 +61,7 @@ void KalmanFilter::updateGain(float gain[3][3], float errorCovariance[3][3])
     matrixProduct3x3(gain, tmp, tmp2Inverse);
 }
 
-void KalmanFilter::updateState(float updatedState[3], float predictedState[3], float gain[3][3], float meausurement[3])
+void KalmanFilter::updateState(float updatedState[3], float predictedState[3], float gain[3][3], float measurement[3])
 {
     // required matrices
     float tmp[3];
