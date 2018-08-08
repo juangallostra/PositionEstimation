@@ -6,12 +6,16 @@
 
 # include <stdint.h>
 
+#include "filters.h"
+#include "algebra.h"
+
 class PositionEstimator {
 
     private:
         // Estimator parameters
         float KOpticalFlow;
         uint32_t lastUpdateTime;
+        KalmanFilter kalman;
 
         // Estimated values
         float xVel;
@@ -26,7 +30,7 @@ class PositionEstimator {
 
     public:
 
-        PositionEstimator(float KOpticalFlow);
+        PositionEstimator(float KOpticalFlow, float R[3][3], float Q[3][3]);
 
         void reset();
 

@@ -6,8 +6,10 @@
 # include <Arduino.h> // XXX For micros; eventually need to compute micros() elsewhere
 
 # include "position.h"
+# include "filters.h"
 
-PositionEstimator::PositionEstimator(float KOpticalFlow)
+PositionEstimator::PositionEstimator(float KOpticalFlow, float R[3][3], float Q[3][3])
+:kalman(R, Q)
 {
     this->KOpticalFlow = KOpticalFlow;
 }
