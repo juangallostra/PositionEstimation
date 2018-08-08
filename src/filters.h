@@ -16,7 +16,6 @@ class KalmanFilter {
     float H[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
     float Q[3][3];
     float R[3][3];
-    float previousAccelSensor[3] = {0, 0, 0};
 
     void predictState(float predictedState[3], float gyro[3], float deltat);
 
