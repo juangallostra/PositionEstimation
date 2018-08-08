@@ -25,8 +25,7 @@ class PositionEstimator {
         float xPos;
         float yPos;
 
-        void angularCompensation(float flow[2], float gyro[3],
-                                 float height, float deltaT);
+        void angularCompensation(float flow[2], float gyro[3], float height, float deltaT);
 
     public:
 
@@ -34,8 +33,7 @@ class PositionEstimator {
 
         void reset();
 
-        void estimate(float flow[2], float gyro[3],
-                      float height, uint32_t currentTime);
+        void estimate(float flow[2], float gyro[3], float height, uint32_t currentTime);
 
         void getEstimatedVelocity(float velocity[2]);
 
