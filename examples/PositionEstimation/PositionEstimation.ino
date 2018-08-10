@@ -218,5 +218,5 @@ void loop(void)
     int16_t flowX, flowY;
     flow.readMotionCount(&flowX, &flowY);
     float currentFlow[2] = {(float)flowX, (float)flowY};
-    position.estimate(currentFlow, gyroData, estAltitude, timestamp);
+    position.estimate(currentFlow, gyroData, accelData, estAltitude, timestamp);
 }

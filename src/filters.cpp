@@ -111,7 +111,6 @@ namespace pe {
       copyMatrix3x3(currErrorCovariance, updatedErrorCovariance);
       // return translational velocity estimate
       copyVector(velocityEstimate, currentState);
-
   }
 
 } // namespace pe

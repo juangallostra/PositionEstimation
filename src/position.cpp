@@ -16,16 +16,12 @@ namespace pe {
       this->KOpticalFlow = KOpticalFlow;
   }
 
-  void PositionEstimator::angularCompensation(float flow[2], float gyro[3],
-                                              float height, float deltaT)
+  void PositionEstimator::angularCompensation(float velocities[2], float flow[2],
+                                              float gyro[3], float height, float deltaT)
   {
-      // Store past estimates
-      xVelPast = xVel;
-      yVelPast = yVel;
-      // Estimate new values
       float K = KOpticalFlow * height;
-      xVel = K * (-flow[0]) / deltaT + height * (-gyro[1]);
-      yVel = K * (-flow[1]) / deltaT + height * gyro[0];
+      velocities[0] = K * (-flow[0]) / deltaT + height * (-gyro[1]);
+      velocities[1] = K * (-flow[1]) / deltaT + height * gyro[0];
   }
 
   void PositionEstimator::reset()
@@ -35,37 +31,31 @@ namespace pe {
       // reset estimated velocity
       xVel = 0;
       yVel = 0;
-      // reset past estimated velocities
-      xVelPast = 0;
-      yVelPast = 0;
-      // reset estimated position
-      xPos = 0;
-      yPos = 0;
-
   }
 
-  void PositionEstimator::estimate(float flow[2], float gyro[3],
+  void PositionEstimator::estimate(float flow[2], float gyro[3], float accel[3],
                                    float height, uint32_t currentTime)
   {
     float deltaT = (currentTime - lastUpdateTime) / 1000000.0f;
     // Perform angular compensation
-    PositionEstimator::angularCompensation(&flow[2], &gyro[3], height, deltaT);
-    // Simple uniformly accelerated linear movement
-    xPos = xPos + xVelPast * deltaT + (1 / 2) * (xVel - xVelPast) * deltaT;
-    yPos = yPos + yVelPast * deltaT + (1 / 2) * (yVel - yVelPast) * deltaT;
+    float velocities[2];
+    PositionEstimator::angularCompensation(velocities, flow, gyro, height, deltaT);
+    // estimate via kalman filter
+    float velocityEstimate[3];
+    kalman.estimate(velocityEstimate, gyro, accel, velocities, deltaT);
+    // Store estimated values
+    xVel = velocityEstimate[0];
+    yVel = velocityEstimate[1];
     lastUpdateTime = currentTime;
   }
 
-  void PositionEstimator::getEstimatedVelocity(float velocity[2])
+  float PositionEstimator::getEstimatedXVelocity()
   {
-      velocity[0] = xVel;
-      velocity[1] = yVel;
+      return xVel;
   }
-
-  void PositionEstimator::getEstimatedPosition(float position[2])
+  float PositionEstimator::getEstimatedYVelocity()
   {
-      position[0] = xPos;
-      position[1] = yPos;
+      return yVel;
   }
 
 }

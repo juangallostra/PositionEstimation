@@ -22,12 +22,8 @@ namespace pe {
           // Estimated values
           float xVel;
           float yVel;
-          float xVelPast;
-          float yVelPast;
-          float xPos;
-          float yPos;
 
-          void angularCompensation(float flow[2], float gyro[3], float height, float deltaT);
+          void angularCompensation(float velocities[2], float flow[2], float gyro[3], float height, float deltaT);
 
       public:
 
@@ -35,11 +31,11 @@ namespace pe {
 
           void reset();
 
-          void estimate(float flow[2], float gyro[3], float height, uint32_t currentTime);
+          void estimate(float flow[2], float gyro[3], float accel[3], float height, uint32_t currentTime);
 
-          void getEstimatedVelocity(float velocity[2]);
+          float getEstimatedXVelocity();
 
-          void getEstimatedPosition(float position[2]);
+          float getEstimatedYVelocity();
 
   }; // class PositionEstimator
 
