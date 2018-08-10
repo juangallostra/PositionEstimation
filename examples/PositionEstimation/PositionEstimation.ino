@@ -219,4 +219,7 @@ void loop(void)
     flow.readMotionCount(&flowX, &flowY);
     float currentFlow[2] = {(float)flowX, (float)flowY};
     position.estimate(currentFlow, gyroData, accelData, estAltitude, timestamp);
+    Serial.print(position.getEstimatedXVelocity());
+    Serial.print(",");
+    Serial.println(position.getEstimatedYVelocity());
 }
