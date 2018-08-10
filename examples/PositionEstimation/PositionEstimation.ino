@@ -206,7 +206,6 @@ void loop(void)
     // Estimate the altitude
     float pressure;
     barometer.getPressure(& pressure);
-    Serial.println(pressure);
     float baroHeight = getAltitude(pressure);
     uint32_t timestamp = micros();
     float accelData[3];
