@@ -9,34 +9,38 @@
 #include "filters.h"
 #include "algebra.h"
 
-class PositionEstimator {
+namespace pe {
 
-    private:
-        // Estimator parameters
-        float KOpticalFlow;
-        uint32_t lastUpdateTime;
-        KalmanFilter kalman;
+  class PositionEstimator {
 
-        // Estimated values
-        float xVel;
-        float yVel;
-        float xVelPast;
-        float yVelPast;
-        float xPos;
-        float yPos;
+      private:
+          // Estimator parameters
+          float KOpticalFlow;
+          uint32_t lastUpdateTime;
+          KalmanFilter kalman;
 
-        void angularCompensation(float flow[2], float gyro[3], float height, float deltaT);
+          // Estimated values
+          float xVel;
+          float yVel;
+          float xVelPast;
+          float yVelPast;
+          float xPos;
+          float yPos;
 
-    public:
+          void angularCompensation(float flow[2], float gyro[3], float height, float deltaT);
 
-        PositionEstimator(float KOpticalFlow, float R[3][3], float Q[3][3]);
+      public:
 
-        void reset();
+          PositionEstimator(float KOpticalFlow, float R[3][3], float Q[3][3]);
 
-        void estimate(float flow[2], float gyro[3], float height, uint32_t currentTime);
+          void reset();
 
-        void getEstimatedVelocity(float velocity[2]);
+          void estimate(float flow[2], float gyro[3], float height, uint32_t currentTime);
 
-        void getEstimatedPosition(float position[2]);
+          void getEstimatedVelocity(float velocity[2]);
 
-}; // class PositionEstimator
+          void getEstimatedPosition(float position[2]);
+
+  }; // class PositionEstimator
+
+} // namespace pe
