@@ -7,9 +7,9 @@
 
 # include "position.h"
 
-PositionEstimator::PositionEstimator(float KOpticalFlow)
+PositionEstimator::PositionEstimator(float gain)
 {
-    this->KOpticalFlow = KOpticalFlow;
+    KOpticalFlow = gain;
 }
 
 void PositionEstimator::angularCompensation(float flow[2], float gyro[3],
@@ -45,7 +45,7 @@ void PositionEstimator::estimate(float flow[2], float gyro[3],
 {
   float deltaT = (currentTime - lastUpdateTime) / 1000000.0f;
   // Perform angular compensation
-  PositionEstimator::angularCompensation(&flow[2], &gyro[3], height, deltaT);
+  PositionEstimator::angularCompensation(flow, gyro, height, deltaT);
   // Simple uniformly accelerated linear movement
   xPos = xPos + xVelPast * deltaT + (1 / 2) * (xVel - xVelPast) * deltaT;
   yPos = yPos + yVelPast * deltaT + (1 / 2) * (yVel - yVelPast) * deltaT;
